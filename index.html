@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cryptocurrency Price Tracker</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #1e1e2e;
+        color: #c9c9d3;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 500px;
+        background-color: #282838;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        text-align: center;
+      }
+
+      h1 {
+        color: #ffd700;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        font-weight: bold;
+      }
+
+      .crypto-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .crypto-card {
+        background-color: #353545;
+        padding: 15px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: transform 0.2s;
+      }
+
+      .crypto-card:hover {
+        transform: scale(1.02);
+      }
+
+      .crypto-card h2 {
+        color: #ffd700;
+        font-size: 1.3rem;
+      }
+
+      .crypto-card .price {
+        color: #00ff90;
+        font-size: 1.1rem;
+        font-weight: bold;
+      }
+      #cryptoList {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 0;
+        margin-top: 20px;
+      }
+
+      #cryptoList div {
+        display: flex;
+        align-items: center;
+        background-color: #f7f7f7;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+      }
+
+      #cryptoList div:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      #cryptoList span {
+        margin-right: 15px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #333;
+      }
+
+      #cryptoList img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-left: auto;
+      }
+
+      #cryptoList span:first-child {
+        flex-grow: 1;
+        font-size: 1.4rem;
+      }
+
+      #cryptoList span:nth-child(2) {
+        font-size: 1.2rem;
+        color: #4caf50;
+      }
+
+      input {
+        padding: 10px;
+        font-size: 1.1rem;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        width: 100%;
+        margin-bottom: 20px;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+
+      input:focus {
+        border-color: #007bff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Cryptocurrency Price Tracker</h1>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search for a cryptocurrency..."
+      />
+
+      <div class="crypto-list" id="cryptoList"></div>
+    </div>
+    <script>
+      const input = document.getElementById("searchInput");
+      const container = document.getElementById("cryptoList");
+
+      const apiUrl =
+        "http://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false";
+
+      input.addEventListener("input", getData);
+
+      async function getData() {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        console.log(data);
+
+        container.textContent = "";
+
+        if (input.value === "") {
+          return;
+        }
+
+        const userInput = input.value.toLowerCase();
+        data.forEach((coin) => {
+          const match = coin.name.toLowerCase().includes(userInput);
+
+          if (match) {
+            const div = document.createElement("div");
+
+            const name = document.createElement("span");
+            name.textContent = `${coin.name}`;
+
+            const price = document.createElement("span");
+            price.textContent = `${coin.current_price.toFixed(2)}`;
+
+            const image = document.createElement("img");
+            image.src = coin.image;
+
+            container.appendChild(div);
+            div.appendChild(name);
+            div.appendChild(price);
+            div.appendChild(image);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
