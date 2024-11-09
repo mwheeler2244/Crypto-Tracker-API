@@ -17,5 +17,5 @@ This project is a cryptocurrency price tracker that allows users to search for s
 
 ### Live Demo
 
-For easy access, view the project live on GitHub Pages:  
+View the project live on GitHub Pages:  
 **[Cryptocurrency Price Tracker](https://mwheeler2244.github.io/Crypto-Tracker-API/)**
